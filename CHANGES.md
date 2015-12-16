@@ -1,8 +1,13 @@
 0.9.10
 ==================
+* bugfix: #6: IE does not work when hash is changed by hand
 
 0.9.9
 ==================
+* bugfix: anchor click routing, no routing of right-clicks
+* bugfix: replaceState was pushing, not replacing
+* feature: add transitionStyle property to excess-route for cleaner history
+Lets you specify history.push vs history.replace for attribute-triggered transitions.
 * bugfix: uriDecode route matches
 * bugfix: throw errors on illegal route transitions (during activate/deactivate callbacks)
 * bugfix: redirect replaces the url, instead of doing a transition
