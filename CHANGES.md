@@ -1,3 +1,11 @@
+0.9.12
+==================
+* bug: #10 parameter navigation sets optionals to undefined if not present
+
+0.9.11
+==================
+* feature: RouteManager.getRouteUrl(path, params)
+
 0.9.10
 ==================
 * bugfix: #6: IE does not work when hash is changed by hand

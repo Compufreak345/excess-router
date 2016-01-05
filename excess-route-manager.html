@@ -361,7 +361,7 @@ setting unless you get conflicts
      * Registers a route. See source for options documentation, since Polymer docs are borked when it comes to options.
      *
      * @param {string} path -- Path string
-     * @param {object} options --
+     * @param {object} options -- see docs in source code until Polymer jsdoc handles docs properly
      * @param {string} options.alias -- route alias
      * @param {boolean} options.isAliasRoute -- true if this is a aliased route
      * @param {boolean} option.activateExclusive -- true if this route can only be activated on its own
@@ -510,11 +510,41 @@ setting unless you get conflicts
     },
 
     /**
+     * Computes url path from routeSpecifier and arguments.
+     * @return {string} -- decoded path
+     */
+    getRoutePath: function(routeSpecifier, params) {
+      var path;
+      switch(this._getRouteType(routeSpecifier)) {
+        case 'alias':
+          var r = this._findRouteByAlias(routeSpecifier);
+          if (!r) {
+            throw new Error("Route alias not registered");
+          }
+          path = r.resolveAlias().getRoutePath(params);
+          break;
+        case 'token':
+          var r = this._findRouteByToken(routeSpecifier).resolveAlias();
+          if (!r) {
+            throw new Error("Route, or route's alias not registered");
+          }
+          path = r.getRoutePath(params);
+          break;
+        case 'path':
+          path = pathToRegexp.compile(routeSpecifier)(params);
+          break;
+        default:
+          throw new Error('unknown path type');
+      }
+      return RouterState.basePath ? RouterState.basePath + path : path;
+    },
+
+    /**
      * decodeUri routeParams in place
      */
     _decodeRouteParams: function(params) {
       for (var p in params)
-        params[p] = decodeURIComponent(params[p]);
+        params[p] = params[p] === undefined ? undefined : decodeURIComponent(params[p]);
       return params;
     },
 
